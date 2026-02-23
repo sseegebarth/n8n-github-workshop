@@ -70,7 +70,7 @@ Klick → Zitat holen → Felder extrahieren → KI-Kommentar
 
 1. Klicke auf **+** → suche nach **OpenAI**
 2. Klicke auf **Create New Credential**
-3. Trage den API Key ein (von deinem Zugangsdaten-Zettel)
+3. Trage den API Key ein Powerpoint-Folie + Y6DZ9Di30HZFu2WCwVarjV1-DK787FAnnubsQZ2jCJ4N-jc8L5NANgPajYbBjO0iw-T3BlbkFJKo7h0V_1yWn-BbuAmMqwLaaenrp0mY18MLXIgUXQXb3S3TnOo2mNwB2txIGtlBl55RqfsdGRYA
 4. Speichern
 
 ---
