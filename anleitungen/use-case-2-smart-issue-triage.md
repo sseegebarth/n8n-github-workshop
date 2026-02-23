@@ -6,6 +6,7 @@ Einen Workflow, der automatisch auf neue GitHub Issues reagiert. Eine KI analysi
 
 ## Workflow-Übersicht
 
+![Alt-Text](images/Github_Workflow.png)
 ```
 Neues Issue → Felder extrahieren → KI-Analyse → Labels setzen → Kommentar posten
 ```
