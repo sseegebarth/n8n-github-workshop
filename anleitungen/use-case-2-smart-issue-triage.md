@@ -30,7 +30,9 @@ Neues Issue → Felder extrahieren → KI-Analyse → Labels setzen → Kommenta
 5. Ausfüllen:
 
 Note: n8n-workshop
+
 Expiration: 30 days
+
 Scopes: Haken bei repo und admin:repo_hook
 
 Generate token klicken
