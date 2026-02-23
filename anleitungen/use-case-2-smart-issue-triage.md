@@ -22,6 +22,21 @@ Neues Issue → Felder extrahieren → KI-Analyse → Labels setzen → Kommenta
 
 ## Schritt 2: GitHub Trigger einrichten (8 Min.)
 
+### Github API
+1. github.com → oben rechts Profilbild → Settings
+2. Links ganz nach unten scrollen → Developer settings
+3. Personal access tokens → Tokens (classic)
+4. Generate new token → Generate new token (classic)
+5. Ausfüllen:
+
+Note: n8n-workshop
+Expiration: 30 days
+Scopes: Haken bei repo und admin:repo_hook
+
+Generate token klicken
+Token kopieren (beginnt mit ghp_)
+
+### Github Trigger einrichten
 1. Klicke auf **+** → suche nach **GitHub Trigger**
 2. Konfiguriere:
 
@@ -32,7 +47,7 @@ Neues Issue → Felder extrahieren → KI-Analyse → Labels setzen → Kommenta
 | **Repository Name** | *(dein Workshop-Repo)* |
 | **Events** | `issues` |
 
-> ⚠️ Falls der Repository Owner nicht angezeigt wird: Wechsel von "From list" auf "Expression" und trage deinen Username direkt als Text ein.
+> Falls der Repository Owner nicht angezeigt wird: Wechsel von "From list" auf "Expression" und trage deinen Username direkt als Text ein.
 
 3. Klicke auf **Test Step** – n8n wartet jetzt auf ein Event
 4. Erstelle ein neues Issue in deinem GitHub-Repo:
