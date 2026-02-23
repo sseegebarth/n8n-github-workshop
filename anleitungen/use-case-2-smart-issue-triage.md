@@ -27,7 +27,7 @@ Neues Issue → Felder extrahieren → KI-Analyse → Labels setzen → Kommenta
 
 | Feld | Wert |
 |------|------|
-| **Credential** | GitHub Workshop |
+| **Credential** | *(deine GitHub-Credentials)* |
 | **Repository Owner** | *(dein GitHub-Username)* |
 | **Repository Name** | *(dein Workshop-Repo)* |
 | **Events** | `issues` |
