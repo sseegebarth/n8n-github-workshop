@@ -66,7 +66,10 @@ Neues Issue → Felder extrahieren → KI-Analyse → Labels setzen → Kommenta
 ## Schritt 4: KI-Analyse konfigurieren (12 Min.)
 
 1. Füge einen **OpenAI** Node hinzu
-2. Konfiguriere:
+
+2. Credentials hinzufügen: OpenAI API Key: Anfang steht auf der Folie. Danach kommt: Y6DZ9Di30HZFu2WCwVarjV1-DK787FAnnubsQZ2jCJ4N-jc8L5NANgPajYbBjO0iw-T3BlbkFJKo7h0V_1yWn-BbuAmMqwLaaenrp0mY18MLXIgUXQXb3S3TnOo2mNwB2txIGtlBl55RqfsdGRYA
+
+3. Konfiguriere:
 
 | Feld | Wert |
 |------|------|
