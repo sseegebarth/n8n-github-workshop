@@ -1,0 +1,267 @@
+{
+  "name": "Github Issues kommentieren",
+  "nodes": [
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "owner": {
+          "__rl": true,
+          "value": "sseegebarth",
+          "mode": "name"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "rebel-marketing-agent",
+          "mode": "list",
+          "cachedResultName": "rebel-marketing-agent",
+          "cachedResultUrl": "https://github.com/sseegebarth/rebel-marketing-agent"
+        },
+        "events": [
+          "issues"
+        ],
+        "options": {}
+      },
+      "type": "n8n-nodes-base.githubTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "c1248a6a-0bc3-492b-a04d-1ce6f3be2e74",
+      "name": "Github Trigger",
+      "webhookId": "f6b32bed-bc90-4f7e-af2d-221eba3b8f0c",
+      "credentials": {
+        "githubOAuth2Api": {
+          "id": "LhKKy9KcVi3S6sYT",
+          "name": "GitHub account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "role": "system",
+              "content": "Du bist ein erfahrener Software-Projektmanager. Analysiere das folgende GitHub Issue und antworte AUSSCHLIESSLICH mit einem JSON-Objekt (kein Markdown, kein Text drumherum):\n\n{\n  \"kategorie\": \"bug\" | \"feature\" | \"frage\" | \"dokumentation\",\n  \"prioritaet\": \"hoch\" | \"mittel\" | \"niedrig\",\n  \"zusammenfassung\": \"Ein Satz, der das Issue beschreibt\",\n  \"begruendung\": \"Warum diese Kategorie und Priorität?\",\n  \"empfehlung\": \"Was sollte das Team als nächstes tun?\"\n}\n\nRegeln für die Priorisierung:\n- hoch: Sicherheitsprobleme, Datenverlust, Produktionsausfälle\n- mittel: Funktionale Bugs, blockierende fehlende Features\n- niedrig: Kosmetik, Nice-to-have, Dokumentationswünsche"
+            },
+            {
+              "content": "=issue-title:  {{ $json.issue_titel }}\n\n\nissue- beschreibung: {{ $json.issue_beschreibung }}\n\nErstellt von: {{ $json.issue_autor }}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_schema",
+              "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"kategorie\": {\n      \"type\": \"string\",\n      \"enum\": [\"bug\", \"feature\", \"frage\", \"dokumentation\"]\n    },\n    \"prioritaet\": {\n      \"type\": \"string\",\n      \"enum\": [\"hoch\", \"mittel\", \"niedrig\"]\n    },\n    \"zusammenfassung\": {\n      \"type\": \"string\",\n      \"description\": \"Ein Satz, der das Issue beschreibt\"\n    },\n    \"begruendung\": {\n      \"type\": \"string\",\n      \"description\": \"Warum diese Kategorie und Priorität?\"\n    },\n    \"empfehlung\": {\n      \"type\": \"string\",\n      \"description\": \"Was sollte das Team als nächstes tun?\"\n    }\n  },\n  \"required\": [\"kategorie\", \"prioritaet\", \"zusammenfassung\", \"begruendung\", \"empfehlung\"],\n  \"additionalProperties\": false\n}"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "8627d640-7053-4996-a6cf-49da67986bd2",
+      "name": "Message a model",
+      "credentials": {
+        "openAiApi": {
+          "id": "kLzlRJyfGkvW39Su",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "operation": "edit",
+        "owner": {
+          "__rl": true,
+          "value": "sseegebarth",
+          "mode": "name"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "rebel-marketing-agent",
+          "mode": "list",
+          "cachedResultName": "rebel-marketing-agent",
+          "cachedResultUrl": "https://github.com/sseegebarth/rebel-marketing-agent"
+        },
+        "issueNumber": "={{ $('Github Trigger').item.json.body.issue.number }}",
+        "editFields": {
+          "labels": [
+            {
+              "label": "={{ $json.output[0].content[0].text.kategorie }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        768,
+        0
+      ],
+      "id": "e6d1ccdc-9e7e-46e0-8e10-8c8b2facdd1b",
+      "name": "Edit an issue",
+      "webhookId": "9cbee649-123a-48d9-8540-06a107dcb5e9",
+      "credentials": {
+        "githubOAuth2Api": {
+          "id": "LhKKy9KcVi3S6sYT",
+          "name": "GitHub account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "operation": "createComment",
+        "owner": {
+          "__rl": true,
+          "value": "sseegebarth",
+          "mode": "name"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "rebel-marketing-agent",
+          "mode": "list",
+          "cachedResultName": "rebel-marketing-agent",
+          "cachedResultUrl": "https://github.com/sseegebarth/rebel-marketing-agent"
+        },
+        "issueNumber": "={{ $json.number }}",
+        "body": "=🤖 **Automatische Issue-Analyse**\n\n**Issue:** [#{{ $('Edit Fields').item.json.issue_number }} – {{ $('Edit Fields').item.json.issue_title }}]({{ $('Edit Fields').item.json.issue_url }})\n\n| | |\n|---|---|\n| **Kategorie** | {{ $('Message a model').item.json.output[0].content[0].text.kategorie }} |\n| **Priorität** | {{ $('Message a model').item.json.output[0].content[0].text.prioritaet }} |\n| **Zusammenfassung** | {{ $('Message a model').item.json.output[0].content[0].text.zusammenfassung }} |\n\n**Begründung:** {{ $('Message a model').item.json.output[0].content[0].text.begruendung }}\n\n**Empfehlung:** {{ $('Message a model').item.json.output[0].content[0].text.empfehlung }}\n\n---\n*Diese Analyse wurde automatisch erstellt.*"
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        976,
+        0
+      ],
+      "id": "ece10846-02ad-4760-99a0-eab7bbbd70b3",
+      "name": "Create a comment on an issue",
+      "webhookId": "2ad4260d-9b06-4cb6-b29d-cd05e28a9323",
+      "credentials": {
+        "githubOAuth2Api": {
+          "id": "LhKKy9KcVi3S6sYT",
+          "name": "GitHub account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "93f95ae2-ec41-42a6-86b9-6f81a51cc823",
+              "name": "issue_titel",
+              "value": "={{ $json.body.issue.title }}",
+              "type": "string"
+            },
+            {
+              "id": "ceeea631-c9e3-424c-9e29-b2b47dd48186",
+              "name": "issue_nummer",
+              "value": "={{ $json.body.issue.number }}",
+              "type": "number"
+            },
+            {
+              "id": "cd5692d9-8756-411e-9efb-62d074fd1bbe",
+              "name": "issue_beschreibung",
+              "value": "={{ $json.body.issue.body }}",
+              "type": "string"
+            },
+            {
+              "id": "cdedadd8-bc87-4bc5-9252-265684db81b8",
+              "name": "issue_url",
+              "value": "={{ $json.body.issue.reactions.url }}",
+              "type": "string"
+            },
+            {
+              "id": "6419ec31-9bd5-4d52-b6fb-e5d990a7d09d",
+              "name": "issue_autor",
+              "value": "={{ $json.body.issue.user.login }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "f8d23a92-1e8b-4cfe-837e-71f68d2eaa86",
+      "name": "Edit Fields"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Github Trigger": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Edit an issue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit an issue": {
+      "main": [
+        [
+          {
+            "node": "Create a comment on an issue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "3d355525-0ba7-4965-b322-c58131c8b9f3",
+  "meta": {
+    "instanceId": "21a67ae55be4ee0dc053f95b9204e9c12bc5d100890acd70f301328d76046218"
+  },
+  "id": "pmzZWpNFf6t3AAJc",
+  "tags": []
+}

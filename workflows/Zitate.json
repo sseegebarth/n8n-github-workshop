@@ -1,0 +1,145 @@
+{
+  "name": "My workflow 3",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "34d3ef32-cd50-47cd-9d89-999f60f0335c",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": "https://dummyjson.com/quotes/random",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "ff1f338e-1d11-4208-86ca-4c6d4e903418",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "bb826baf-6ed6-4092-b72d-9c4f675c5d10",
+              "name": "zitat",
+              "value": "={{ $json.quote }}",
+              "type": "string"
+            },
+            {
+              "id": "8c5c462a-63fe-47f5-892c-a1ea0ae97216",
+              "name": "autor",
+              "value": "={{ $json.author }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        416,
+        0
+      ],
+      "id": "49e09f3f-522d-490d-9ac4-5b7b49178531",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "role": "system",
+              "content": "Du bist ein witziger und kluger Kommentator. Du bekommst ein Zitat\nund schreibst einen kurzen, unterhaltsamen Kommentar dazu.\nDer Kommentar soll maximal 2 Sätze lang sein.\nSchreibe auf Deutsch."
+            },
+            {
+              "content": "=Zitat: \"{{ $json.zitat }}\"\n– {{ $json.autor }}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        624,
+        0
+      ],
+      "id": "23326bdb-4995-4f7b-8f1f-fccb96002618",
+      "name": "KI-Kommentar",
+      "credentials": {
+        "openAiApi": {
+          "id": "kLzlRJyfGkvW39Su",
+          "name": "OpenAi account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "KI-Kommentar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "46d13936-4b20-44e3-9cd6-16c967574d89",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "21a67ae55be4ee0dc053f95b9204e9c12bc5d100890acd70f301328d76046218"
+  },
+  "id": "TcKp9a0KyATFrnd7",
+  "tags": []
+}
