@@ -6,6 +6,7 @@ Einen Workflow, der per Knopfdruck ein zufälliges Zitat aus dem Internet holt u
 
 ## Workflow-Übersicht
 
+![Alt-Text](images/Zitat_Workflow.png)
 ```
 Klick → Zitat holen → Felder extrahieren → KI-Kommentar
 ```
